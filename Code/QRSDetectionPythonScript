@@ -1,0 +1,37 @@
+# The script MUST contain a function named azureml_main
+# which is the entry point for this module.
+
+# imports up here can be used to 
+import pandas as pd
+
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+def azureml_main(dataframe2 = None):
+    Filtered_signal = dataframe2.values 
+    # Execution logic goes here
+    Differentiated_signal  = [[] for i in range(len(Filtered_signal)-1)]
+    Differentiated_signal_twice  = [[] for i in range(len(Differentiated_signal)-1)]
+    QRS_complex=[[] for i in range(len(Differentiated_signal_twice))]
+    
+    for n in range(len(Filtered_signal)-1):
+    
+        u=float(Filtered_signal[n+1][1])-float(Filtered_signal[n][1])
+        Differentiated_signal[n].append(n)
+        Differentiated_signal[n].append(u)
+    
+    for n in range(len(Differentiated_signal)-1):
+    
+        z=float(Differentiated_signal[n+1][1])-float(Differentiated_signal[n][1])
+        Differentiated_signal_twice[n].append(n)
+        Differentiated_signal_twice[n].append(z)
+    
+    for n in range(len(Differentiated_signal_twice)):
+    
+        w=float(Differentiated_signal_twice[n][1])*float(Differentiated_signal_twice[n][1])
+        QRS_complex[n].append(n)
+        QRS_complex[n].append(w)
+    dataframe3 = pd.DataFrame(QRS_complex)
+        
+    # Return value must be of a sequence of pandas.DataFrame
+    return dataframe3,

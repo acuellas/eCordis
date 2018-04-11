@@ -1,0 +1,30 @@
+# imports  
+import pandas as pd
+import numpy as np
+
+list1=[]
+threshold_Wave=2000
+
+
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+def azureml_main(dataframe3 = None):
+    list1 =dataframe3.values
+    # Execution logic goes here
+      
+    rList=[[]for i in range(len(list1))]
+    
+    for x in range(len(list1)):
+                
+        if(float(list1[x][1])>threshold_Wave):
+            rList[x].append(list1[x][0])
+            rList[x].append(list1[x][1])
+        else:
+            rList[x].append(list1[x][0]) 
+            rList[x].append(0)
+
+    
+    dataframe4 = pd.DataFrame(rList)
+    # Return value must be of a sequence of pandas.DataFrame
+    return dataframe4

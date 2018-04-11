@@ -1,0 +1,26 @@
+# The script MUST contain a function named azureml_main
+# which is the entry point for this module.
+
+# imports up here can be used to 
+import pandas as pd
+
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+def azureml_main(dataframe1 = None):
+
+    # Execution logic goes here
+    
+    ECG_list= dataframe1.values    
+    Filtered_signal = [[] for i in range(len(ECG_list)-2)]
+
+    for n in range(len(ECG_list)-2):
+        
+        y=(float(ECG_list[n+2][1])+float(ECG_list[n+1][1])*2+float(ECG_list[n][1]))/4
+        Filtered_signal[n].append(n)
+        Filtered_signal[n].append(y)
+        dataframe2 = pd.DataFrame(Filtered_signal)
+
+    
+    # Return value must be of a sequence of pandas.DataFrame
+    return dataframe2,
