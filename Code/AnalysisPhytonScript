@@ -1,0 +1,54 @@
+# imports up here can be used to 
+import pandas as pd
+import numpy as np
+
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+def azureml_main(dataframe6 = None, dataframe7 = None):
+    list1=[]
+    HR_List=[60,70,80,90,100]
+    threshold_unnomal_count=[4,5,6,7]
+    threshold_unnomal_QRS_Duration_float_value=[0.07,0.06,0.05,0.04]
+    
+    sample=0.00333333
+    list1 = dataframe6.values
+         
+    HR = dataframe7.values
+    
+    
+    total=0
+    avg=0
+    
+    for x in range(len(list1)):
+        total=float(list1[x][1])+total
+    avg= total/len(list1)  
+    
+    
+    total_unnormal=0
+    range_index=0
+    for x in range(len(HR_List)):
+        if(int(HR)>int(HR_List[x]) and int(HR)<int(HR_List[x+1])):
+            range_index=x
+        
+    unnormal_count=0
+    avg_high=avg+threshold_unnomal_QRS_Duration_float_value[range_index]
+    avg_low =avg-threshold_unnomal_QRS_Duration_float_value[range_index]
+    
+    for x in range(len(list1)):
+        if(float(list1[x][1])>avg_high and float(list1[x][1])<avg_low):
+            unnormal_count=unnormal_count+1
+    
+    print('Result:')	 	
+    print('Heart rate is '+str(HR))
+    print(str(len(list1))+' sets of valid data were extracted')
+    print('Average for the data is ' + str(avg))
+    print('The duration float is '+ str(threshold_unnomal_QRS_Duration_float_value[range_index]))
+    print('There is '+str(unnormal_count)+' unnormal duration between each heart beats')
+    print('Unnormal duration limit is '+str(threshold_unnomal_count[range_index]))
+    
+    if(unnormal_count<threshold_unnomal_count[range_index]):
+        print("It is a normal sample.")
+    else:
+        print("It is arrhythmia sample")
+    return 
