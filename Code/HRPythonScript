@@ -1,0 +1,45 @@
+# imports up here can be used to 
+import pandas as pd
+import numpy as np
+# The entry point function can contain up to two input arguments:
+#   Param<dataframe1>: a pandas.DataFrame
+#   Param<dataframe2>: a pandas.DataFrame
+def azureml_main(dataframe5 = None):
+    list1=[]
+    
+    sample=0.00333333
+    threshold_QRSduration=30
+    threshold_HR=5
+    
+    list1=dataframe5.values
+    rr_Du_List=[]
+    duration=0
+    
+    for x in range(len(list1)-1):
+        RR_range=float(list1[x+1][1])-float(list1[x][1])
+        if(RR_range>threshold_QRSduration):
+            duration=RR_range*sample
+            rr_Du_List.append(duration)
+        
+    HR_duration=(float(list1[len(list1)-2][1])-float(list1[0][1]))*sample
+    
+    HR_duration=60/HR_duration
+    
+    HR=int(len(rr_Du_List)*HR_duration)
+    HR_List=[HR]
+    
+    print('heart rate is '+str(HR-threshold_HR )+'~'+str(HR+threshold_HR)+','+str(HR))
+    
+    print(rr_Du_List)
+    
+    SSD_List=[[]for i in range(len(rr_Du_List))]
+    
+    for x in range(len(SSD_List)):
+        SSD_List[x].append(x)
+        SSD_List[x].append(rr_Du_List[x])
+        
+    dataframe6=pd.DataFrame(SSD_List)
+    dataframe7=pd.DataFrame(HR_List)
+      
+    # Return value must be of a sequence of pandas.DataFrame
+    return dataframe7
